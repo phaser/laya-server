@@ -215,9 +215,11 @@ thread pool and the event loop stays free.
 
 See `PLAN.md` for the design decisions and their sources.
 
-## Licenses
+## License
 
-laya-mlx is Apache-2.0. FastAPI and typesafe-sdk are MIT. uvicorn is BSD-3-Clause.
-laya-mlx is an independent MLX port of
+ISC. See [LICENSE](LICENSE).
+
+Dependencies keep their own licenses: laya-mlx is Apache-2.0, FastAPI and
+typesafe-sdk are MIT, uvicorn is BSD-3-Clause. laya-mlx is an independent MLX port of
 [Convai Innovations' Laya](https://github.com/NandhaKishorM/laya), not an official
 release. This project is not affiliated with TypeSafe AI.
