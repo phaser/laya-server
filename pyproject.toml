@@ -1,0 +1,26 @@
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "laya-server"
+version = "0.1.0"
+description = "Jev-compatible HTTP server for laya-mlx typed decisions"
+requires-python = ">=3.11"
+dependencies = [
+    "laya-mlx>=0.1.0",
+    "fastapi>=0.115",
+    "uvicorn>=0.32",
+]
+
+[project.optional-dependencies]
+dev = ["pytest>=8", "httpx>=0.28"]
+
+[project.scripts]
+laya-server = "laya_server.__main__:main"
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/laya_server"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
