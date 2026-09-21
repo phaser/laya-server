@@ -39,19 +39,39 @@ Hugging Face cache. `GET /healthz` returns 200 when the model is ready.
 |---|---|---|
 | `--host` | `127.0.0.1` | Bind address. |
 | `--port` | `8000` | Bind port. |
-| `--model` | `aac6fef/laya-mlx` | Checkpoint: a Hugging Face repository id or a local directory. |
+| `--model` | `aac6fef/laya-mlx` | Checkpoint: a Hugging Face repository id or a local directory. See [Known models](#known-models). |
 | `--dtype` | `float16` | `float16`, `float32` or `bfloat16`. |
 | `--batch-size` | `16` | Questions per forward pass. |
 | `--device` | MLX default | `gpu` or `cpu`. |
 | `--max-questions` | `128` | Reject a request with more questions. |
 | `--max-body-bytes` | `1048576` | Reject a larger request body. |
 
-Other checkpoints:
+## Known models
+
+`--model` accepts any Laya checkpoint that `laya-mlx` can load: a Hugging Face
+repository id or a local directory. These are the checkpoints we know.
+
+| Checkpoint | Encoder | Context | Languages | Note |
+|---|---|---|---|---|
+| [`aac6fef/laya-mlx`](https://huggingface.co/aac6fef/laya-mlx) | ModernBERT-large, 421M | 512 tokens | English | The default. MLX FP16 conversion of `convaiinnovations/laya`. |
+| [`aac6fef/laya-multilingual-mlx`](https://huggingface.co/aac6fef/laya-multilingual-mlx) | mmBERT-base, 322M | 1024 tokens | 100 and more | MLX FP16 conversion of `convaiinnovations/laya-multilingual`. |
+| [`convaiinnovations/laya`](https://huggingface.co/convaiinnovations/laya) | ModernBERT-large, 421M | 512 tokens | English | Upstream weights. `laya-mlx` reads them directly. |
+| [`convaiinnovations/laya-multilingual`](https://huggingface.co/convaiinnovations/laya-multilingual) | mmBERT-base, 322M | 1024 tokens | 100 and more | Upstream weights. |
+| [`convaiinnovations/laya-typed-decisions`](https://huggingface.co/convaiinnovations/laya-typed-decisions) | ModernBERT-large, 421M | 1024 tokens | English | Fine-tuned on four synthetic workflows. Do not select it as a general default. |
 
 ```bash
-laya-server --model aac6fef/laya-multilingual-mlx   # multilingual, 1024-token context
+laya-server --model aac6fef/laya-multilingual-mlx
 laya-server --model convaiinnovations/laya-typed-decisions
+laya-server --model ./my-local-checkpoint
 ```
+
+Pick the multilingual checkpoint for non-English input. The English checkpoint
+does not degrade gently off English. On 20-option intent classification it scores
+0.100 on Hindi, against 0.050 for random choice, and it reports high confidence
+while it does this.
+
+The server loads one checkpoint per process. Run one process for each checkpoint
+that you serve.
 
 ## API
 
